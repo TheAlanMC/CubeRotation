@@ -53,9 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           setState(() {
-            valueSliderX = 0.0;
-            valueSliderY = 0.0;
+            valueSliderX = pi / 8;
+            valueSliderY = pi / 8;
             valueSliderZ = 200;
+            touchMode = false;
           });
         },
         child: const Icon(Icons.refresh),
