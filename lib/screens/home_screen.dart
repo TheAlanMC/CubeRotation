@@ -59,48 +59,41 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget>? cubeFaces() {
-    if (valueSliderZ < pi / 2) {
-      if (valueSliderY < pi / 2) {
-        if (valueSliderX < pi / 2) {
-          return faces(Faces.fru);
-        } else if (valueSliderX < pi) {
-          return faces(Faces.blu);
-        } else if (valueSliderX < 3 * pi / 2) {
-          return faces(Faces.bld);
-        } else {
-          return faces(Faces.frd);
-        }
-      } else if (valueSliderY < pi) {
-        if (valueSliderX < pi / 2) {
-          return faces(Faces.bru);
-        } else if (valueSliderX < pi) {
-          return faces(Faces.flu);
-        } else if (valueSliderX < 3 * pi / 2) {
-          return faces(Faces.fld);
-        } else {
-          return faces(Faces.brd);
-        }
-      } else if (valueSliderY < 3 * pi / 2) {
-        if (valueSliderX < pi / 2) {
-          return faces(Faces.blu);
-        } else if (valueSliderX < pi) {
-          return faces(Faces.fru);
-        } else if (valueSliderX < 3 * pi / 2) {
-          return faces(Faces.frd);
-        } else {
-          return faces(Faces.bld);
-        }
-      } else {
-        if (valueSliderX < pi / 2) {
-          return faces(Faces.flu);
-        } else if (valueSliderX < pi) {
-          return faces(Faces.bru);
-        } else if (valueSliderX < 3 * pi / 2) {
-          return faces(Faces.brd);
-        } else {
-          return faces(Faces.fld);
-        }
-      }
+    print('x=${cos(valueSliderX) * 100} y=${cos(valueSliderY) * 100} z=${cos(valueSliderZ) * 100}');
+    double cx = cos(valueSliderX);
+    double cy = cos(valueSliderY);
+    double cz = cos(valueSliderZ);
+    //cuadrante 1,1,1
+    if (0 <= cx && cx <= 1 && 0 <= cy && cy <= 1 && 0 <= cz && cz <= 1) {
+      return faces(Faces.fru);
+    }
+    //cuadrante 1,1,-1
+    else if (0 <= cx && cx <= 1 && 0 <= cy && cy <= 1 && -1 <= cz && cz <= 0) {
+      return faces(Faces.frd);
+    }
+    //cuadrante 1,-1,1
+    else if (0 <= cx && cx <= 1 && -1 <= cy && cy <= 0 && 0 <= cz && cz <= 1) {
+      return faces(Faces.bru);
+    }
+    //cuadrante 1,-1,-1
+    else if (0 <= cx && cx <= 1 && -1 <= cy && cy <= 0 && -1 <= cz && cz <= 0) {
+      return faces(Faces.brd);
+    }
+    //cuadrante -1,1,1
+    else if (-1 <= cx && cx <= 0 && 0 <= cy && cy <= 1 && 0 <= cz && cz <= 1) {
+      return faces(Faces.blu);
+    }
+    //cuadrante -1,1,-1
+    else if (-1 <= cx && cx <= 0 && 0 <= cy && cy <= 1 && -1 <= cz && cz <= 0) {
+      return faces(Faces.bld);
+    }
+    //cuadrante -1,-1,1
+    else if (-1 <= cx && cx <= 0 && -1 <= cy && cy <= 0 && 0 <= cz && cz <= 1) {
+      return faces(Faces.flu);
+    }
+    //cuadrante -1,-1,-1
+    else if (-1 <= cx && cx <= 0 && -1 <= cy && cy <= 0 && -1 <= cz && cz <= 0) {
+      return faces(Faces.fld);
     }
   }
 
@@ -111,41 +104,49 @@ class _HomeScreenState extends State<HomeScreen> {
         faces.add(frontFace());
         faces.add(rightFace());
         faces.add(upFace());
+        print('fru');
         break;
       case Faces.frd:
         faces.add(frontFace());
         faces.add(rightFace());
         faces.add(downFace());
+        print('frd');
         break;
       case Faces.bru:
         faces.add(backFace());
         faces.add(rightFace());
         faces.add(upFace());
+        print('bru');
         break;
       case Faces.brd:
         faces.add(backFace());
         faces.add(rightFace());
         faces.add(downFace());
+        print('brd');
         break;
       case Faces.flu:
         faces.add(frontFace());
         faces.add(leftFace());
         faces.add(upFace());
+        print('flu');
         break;
       case Faces.fld:
         faces.add(frontFace());
         faces.add(leftFace());
         faces.add(downFace());
+        print('fld');
         break;
       case Faces.blu:
         faces.add(backFace());
         faces.add(leftFace());
         faces.add(upFace());
+        print('blu');
         break;
       case Faces.bld:
         faces.add(backFace());
         faces.add(leftFace());
         faces.add(downFace());
+        print('bld');
         break;
     }
     return faces;
@@ -238,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Slider.adaptive(
           value: valueSliderX,
           min: 0,
-          max: 2 * pi,
+          max: pi,
           activeColor: Colors.red,
           inactiveColor: Colors.red.withOpacity(0.3),
           thumbColor: Colors.red,
@@ -251,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Slider.adaptive(
           value: valueSliderY,
           min: 0,
-          max: 2 * pi,
+          max: pi,
           activeColor: Colors.yellow,
           inactiveColor: Colors.yellow.withOpacity(0.3),
           thumbColor: Colors.yellow,
@@ -264,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Slider.adaptive(
           value: valueSliderZ,
           min: 0,
-          max: 2 * pi,
+          max: pi,
           activeColor: Colors.green,
           inactiveColor: Colors.green.withOpacity(0.3),
           thumbColor: Colors.green,
