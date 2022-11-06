@@ -78,8 +78,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onPanUpdate: (details) {
         setState(() {
-          valueSliderX += details.delta.dx * pi / 180;
-          valueSliderY += details.delta.dy * pi / 180;
+          valueSliderY += details.delta.dx * pi / 180;
+          valueSliderX += details.delta.dy * pi / 180;
+          if (valueSliderX > pi) {
+            valueSliderX = pi;
+          } else if (valueSliderX < -pi) {
+            valueSliderX = -pi;
+          }
+          if (valueSliderY > pi) {
+            valueSliderY = pi;
+          } else if (valueSliderY < -pi) {
+            valueSliderY = -pi;
+          }
         });
       },
       child: Transform(
@@ -351,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
           thumbColor: Colors.green,
           onChanged: (value) {
             setState(() {
-              valueSliderZ = touchMode == false ? value : valueSliderZ;
+              valueSliderZ = value;
             });
           },
         ),
