@@ -57,45 +57,45 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget>? cubeFaces() {
-    if (valueSliderY < pi / 2) {
-      if (valueSliderX < pi / 2) {
+    if (valueSliderY <= pi / 2 && valueSliderY >= 0) {
+      if (valueSliderX <= pi / 2 && valueSliderX >= 0) {
         return faces(Faces.fru);
-      } else if (valueSliderX < pi) {
+      } else if (valueSliderX <= pi && valueSliderX >= pi / 2) {
         return faces(Faces.blu);
-      } else if (valueSliderX < 3 * pi / 2) {
-        return faces(Faces.bld);
-      } else {
+      } else if (valueSliderX <= 0 && valueSliderX >= -pi / 2) {
         return faces(Faces.frd);
+      } else {
+        return faces(Faces.bld);
       }
-    } else if (valueSliderY < pi) {
-      if (valueSliderX < pi / 2) {
+    } else if (valueSliderY <= pi && valueSliderY >= pi / 2) {
+      if (valueSliderX <= pi / 2 && valueSliderX >= 0) {
         return faces(Faces.bru);
-      } else if (valueSliderX < pi) {
+      } else if (valueSliderX <= pi && valueSliderX >= pi / 2) {
         return faces(Faces.flu);
-      } else if (valueSliderX < 3 * pi / 2) {
+      } else if (valueSliderX <= 0 && valueSliderX >= -pi / 2) {
+        return faces(Faces.brd);
+      } else {
+        return faces(Faces.fld);
+      }
+    } else if (valueSliderY <= 0 && valueSliderY >= -pi / 2) {
+      if (valueSliderX <= pi / 2 && valueSliderX >= 0) {
+        return faces(Faces.flu);
+      } else if (valueSliderX <= pi && valueSliderX >= pi / 2) {
+        return faces(Faces.bru);
+      } else if (valueSliderX <= 0 && valueSliderX >= -pi / 2) {
         return faces(Faces.fld);
       } else {
         return faces(Faces.brd);
-      }
-    } else if (valueSliderY < 3 * pi / 2) {
-      if (valueSliderX < pi / 2) {
-        return faces(Faces.blu);
-      } else if (valueSliderX < pi) {
-        return faces(Faces.fru);
-      } else if (valueSliderX < 3 * pi / 2) {
-        return faces(Faces.frd);
-      } else {
-        return faces(Faces.bld);
       }
     } else {
-      if (valueSliderX < pi / 2) {
-        return faces(Faces.flu);
-      } else if (valueSliderX < pi) {
-        return faces(Faces.bru);
-      } else if (valueSliderX < 3 * pi / 2) {
-        return faces(Faces.brd);
+      if (valueSliderX <= pi / 2 && valueSliderX >= 0) {
+        return faces(Faces.blu);
+      } else if (valueSliderX <= pi && valueSliderX >= pi / 2) {
+        return faces(Faces.fru);
+      } else if (valueSliderX <= 0 && valueSliderX >= -pi / 2) {
+        return faces(Faces.bld);
       } else {
-        return faces(Faces.fld);
+        return faces(Faces.frd);
       }
     }
   }
@@ -233,8 +233,8 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Slider.adaptive(
           value: valueSliderX,
-          min: 0,
-          max: 2 * pi,
+          min: -pi,
+          max: pi,
           activeColor: Colors.red,
           inactiveColor: Colors.red.withOpacity(0.3),
           thumbColor: Colors.red,
@@ -246,8 +246,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Slider.adaptive(
           value: valueSliderY,
-          min: 0,
-          max: 2 * pi,
+          min: -pi,
+          max: pi,
           activeColor: Colors.yellow,
           inactiveColor: Colors.yellow.withOpacity(0.3),
           thumbColor: Colors.yellow,
