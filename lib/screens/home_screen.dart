@@ -11,19 +11,43 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var valueSliderX = 0.0;
-  var valueSliderY = 0.0;
-  var valueSliderZ = 200.0;
+  double valueSliderX = 0.0;
+  double valueSliderY = 0.0;
+  double valueSliderZ = 200.0;
+  bool touchMode = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
+      appBar: AppBar(
+        title: const Text('3D RUBIK\'S CUBE'),
+      ),
       body: Stack(
         children: [
           Positioned(
               bottom: MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight, left: 0, right: 0, child: customSliders()),
-          Positioned(top: kToolbarHeight, left: 0, right: 0, child: values()),
-          Center(child: customTransform()),
+          Positioned(top: 20, left: 0, right: 0, child: values()),
+          Positioned(
+            top: kToolbarHeight + 120,
+            left: 0,
+            right: 0,
+            child: Center(child: touchMode == false ? customTransform() : customGestureDetector()),
+          ),
+          Positioned(
+            top: 40,
+            left: 0,
+            right: 0,
+            child: Center(
+                child: SwitchListTile.adaptive(
+                    title: const Text('Touch Mode'),
+                    value: touchMode,
+                    onChanged: (value) {
+                      setState(() {
+                        touchMode = value;
+                      });
+                    })),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -47,6 +71,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ..rotateX(valueSliderX)
         ..rotateY(valueSliderY),
       child: cube(),
+    );
+  }
+
+  Widget customGestureDetector() {
+    return GestureDetector(
+      onPanUpdate: (details) {
+        setState(() {
+          valueSliderX += details.delta.dx * pi / 180;
+          valueSliderY += details.delta.dy * pi / 180;
+        });
+      },
+      child: Transform(
+        alignment: Alignment.center,
+        transform: Matrix4.identity()
+          ..rotateX(valueSliderX)
+          ..rotateY(valueSliderY),
+        child: cube(),
+      ),
     );
   }
 
@@ -207,13 +249,56 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Container customContainer({required color, String text = ''}) {
     return Container(
-      width: valueSliderZ,
-      height: valueSliderZ,
+        width: valueSliderZ,
+        height: valueSliderZ,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 1),
+          color: Colors.black45,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: customGrid(color));
+  }
+
+  Widget customGrid(color) {
+    return Row(
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            invidualGrid(color),
+            invidualGrid(color),
+            invidualGrid(color),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            invidualGrid(color),
+            invidualGrid(color),
+            invidualGrid(color),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            invidualGrid(color),
+            invidualGrid(color),
+            invidualGrid(color),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget invidualGrid(color) {
+    return Container(
+      width: valueSliderZ / 3 - 1,
+      height: valueSliderZ / 3 - 1,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 1),
+        border: Border.all(color: Colors.black, width: valueSliderZ / 40),
         color: color,
+        borderRadius: BorderRadius.circular(valueSliderZ / 20),
       ),
-      child: Center(child: Text(text, style: const TextStyle(fontSize: 20))),
     );
   }
 
@@ -240,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
           thumbColor: Colors.red,
           onChanged: (value) {
             setState(() {
-              valueSliderX = value;
+              valueSliderX = touchMode == false ? value : valueSliderX;
             });
           },
         ),
@@ -253,7 +338,7 @@ class _HomeScreenState extends State<HomeScreen> {
           thumbColor: Colors.yellow,
           onChanged: (value) {
             setState(() {
-              valueSliderY = value;
+              valueSliderY = touchMode == false ? value : valueSliderY;
             });
           },
         ),
@@ -266,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
           thumbColor: Colors.green,
           onChanged: (value) {
             setState(() {
-              valueSliderZ = value;
+              valueSliderZ = touchMode == false ? value : valueSliderZ;
             });
           },
         ),
